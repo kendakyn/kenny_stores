@@ -1,0 +1,29 @@
+[
+  {
+    "id": "p001",
+    "name": "Laptop Model X",
+    "brand": "TechBrand",
+    "price": 899.99,
+    "category": "laptops",
+    "image": "images/laptop.jpg",
+    "description": "High performance laptop with 16GB RAM, 512GB SSD."
+  },
+  {
+    "id": "p002",
+    "name": "Smartphone Y",
+    "brand": "PhoneCo",
+    "price": 499.99,
+    "category": "smartphones",
+    "image": "images/smartphone.jpg",
+    "description": "Latest smartphone with OLED display and 5G connectivity."
+  },
+  {
+    "id": "p003",
+    "name": "Wireless Mouse",
+    "brand": "TechBrand",
+    "price": 29.99,
+    "category": "accessories",
+    "image": "images/mouse.jpg",
+    "description": "Ergonomic wireless mouse with long battery life."
+  }
+]

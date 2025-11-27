@@ -1,0 +1,163 @@
+/* ============================= */
+/*   GLOBAL STYLES               */
+/* ============================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h2.section-title {
+    text-align: center;
+    font-size: 28px;
+    margin: 40px 0 20px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* ============================= */
+/*   HEADER / NAVBAR             */
+/* ============================= */
+.admin-header {
+    width: 100%;
+    background: #0d0d0d;
+    color: #fff;
+    padding: 15px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.admin-header .logo h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #00aaff;
+}
+
+.admin-navbar a {
+    margin: 0 15px;
+    font-size: 16px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.admin-navbar a:hover,
+.admin-navbar a.active {
+    color: #00d8ff;
+}
+
+/* ============================= */
+/*   DASHBOARD CARDS             */
+/* ============================= */
+.admin-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00aaff;
+}
+
+/* ============================= */
+/*   QUICK ACTION BUTTONS        */
+/* ============================= */
+.quick-links {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.quick-links .btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #00aaff;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.quick-links .btn:hover {
+    background: #008ecc;
+}
+
+/* ============================= */
+/*   RESPONSIVE DESIGN           */
+/* ============================= */
+@media(max-width: 1000px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .admin-navbar a {
+        display: inline-block;
+        margin: 8px;
+    }
+
+    .quick-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

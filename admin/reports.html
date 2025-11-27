@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Reports</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- ================= HEADER / NAVBAR ================= -->
+    <header class="admin-header">
+        <div class="logo">
+            <h1>Kenny Electronics Admin</h1>
+        </div>
+        <nav class="admin-navbar">
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html"><i class="fas fa-box"></i> Products</a>
+            <a href="reports.html" class="active"><i class="fas fa-chart-line"></i> Reports</a>
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="admin-main">
+        <h2 class="section-title">Sales & Inventory Reports</h2>
+
+        <!-- ================= REPORT SUMMARY CARDS ================= -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Sales</h3>
+                <p id="totalSales">$0.00</p>
+            </div>
+            <div class="card">
+                <h3>Total Orders</h3>
+                <p id="totalOrders">0</p>
+            </div>
+            <div class="card">
+                <h3>Top Product</h3>
+                <p id="topProduct">-</p>
+            </div>
+        </div>
+
+        <!-- ================= CHARTS ================= -->
+        <h3 style="margin-top:40px; text-align:center;">Sales by Category</h3>
+        <canvas id="salesChart" style="max-width: 900px; margin: 0 auto; display:block;"></canvas>
+
+        <h3 style="margin-top:40px; text-align:center;">Revenue Over Time</h3>
+        <canvas id="revenueChart" style="max-width: 900px; margin: 0 auto; display:block;"></canvas>
+    </main>
+
+    <script src="js/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Products</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ================= HEADER / NAVBAR ================= -->
+    <header class="admin-header">
+        <div class="logo">
+            <h1>Kenny Electronics Admin</h1>
+        </div>
+        <nav class="admin-navbar">
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html" class="active"><i class="fas fa-box"></i> Products</a>
+            <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="admin-main">
+        <h2 class="section-title">Manage Products</h2>
+
+        <!-- ================= ADD PRODUCT FORM ================= -->
+        <div class="product-form-card">
+            <h3>Add / Edit Product</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" placeholder="Enter product name" required>
+
+                <label for="productCategory">Category:</label>
+                <select id="productCategory" required>
+                    <option value="">Select category</option>
+                    <option value="Laptops">Laptops</option>
+                    <option value="Phones">Phones</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="TVs">Televisions</option>
+                </select>
+
+                <label for="productPrice">Price ($):</label>
+                <input type="number" id="productPrice" placeholder="Enter product price" required>
+
+                <label for="productImage">Image URL:</label>
+                <input type="text" id="productImage" placeholder="Enter image URL" required>
+
+                <label for="productDescription">Description:</label>
+                <textarea id="productDescription" placeholder="Enter product description" required></textarea>
+
+                <button type="submit" class="btn">Save Product</button>
+            </form>
+        </div>
+
+        <!-- ================= PRODUCTS TABLE ================= -->
+        <h3 style="margin-top:40px;">Existing Products</h3>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price ($)</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Products will be dynamically inserted here via JS -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/products.js"></script>
+</body>
+</html>

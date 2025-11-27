@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Kenny Electronics Store</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <h1>Kenny Electronics Store</h1>
+        </div>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">Cart</a>
+            <a href="register.html" class="active">Register</a>
+        </nav>
+    </header>
+
+
+
+    <!-- REGISTER FORM -->
+    <section class="auth-section">
+        <form class="auth-form" id="registerForm">
+
+            <h2>Create Account</h2>
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="regName" required placeholder="Full name">
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="regEmail" required placeholder="Email">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" required placeholder="Password">
+            </div>
+
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" id="regConfirmPassword" required placeholder="Repeat password">
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+
+            <p class="auth-link">
+                Already have an account? <a href="login.html">Login</a>
+            </p>
+
+        </form>
+    </section>
+
+
+
+    <footer>
+        <p>© 2025 Kenny Electronics Store. All rights reserved.</p>
+    </footer>
+
+    <script src="js/register.js"></script>
+</body>
+</html>

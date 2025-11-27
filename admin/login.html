@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging Out - Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <main class="admin-main" style="text-align:center; padding-top: 150px;">
+        <h2>Logging Out...</h2>
+        <p>You will be redirected to the login page shortly.</p>
+    </main>
+
+    <script>
+        // Clear admin session (or local storage token)
+        localStorage.removeItem('adminLoggedIn'); // example key
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+    </script>
+</body>
+</html>

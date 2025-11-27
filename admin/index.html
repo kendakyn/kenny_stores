@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenny Electronics Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ================= HEADER / NAVBAR ================= -->
+    <header class="admin-header">
+        <div class="logo">
+            <h1>Kenny Electronics Admin</h1>
+        </div>
+        <nav class="admin-navbar">
+            <a href="index.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html"><i class="fas fa-box"></i> Products</a>
+            <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+    <!-- ================= DASHBOARD METRICS ================= -->
+    <main class="admin-main">
+        <h2 class="section-title">Dashboard Overview</h2>
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Products</h3>
+                <p id="totalProducts">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Orders</h3>
+                <p id="totalOrders">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <p id="totalRevenue">$0.00</p>
+            </div>
+        </div>
+
+        <!-- ================= QUICK LINKS ================= -->
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="quick-links">
+            <a href="products.html" class="btn"><i class="fas fa-plus"></i> Add / Manage Products</a>
+            <a href="reports.html" class="btn"><i class="fas fa-chart-pie"></i> View Reports</a>
+        </div>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

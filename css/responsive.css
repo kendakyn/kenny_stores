@@ -1,0 +1,112 @@
+/* ===== RESPONSIVE STYLING ===== */
+
+/* --- Header --- */
+@media (max-width: 992px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .icons {
+        margin-top: 10px;
+    }
+}
+
+/* --- Products Page --- */
+@media (max-width: 768px) {
+    .products-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .product-card img {
+        height: 150px;
+    }
+
+    .product-card h3 {
+        font-size: 1rem;
+    }
+}
+
+/* --- Cart Page --- */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+
+    .cart-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .quantity-select {
+        width: 50px;
+    }
+}
+
+/* --- Product Details Page --- */
+@media (max-width: 768px) {
+    .product-detail-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-detail-img img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+
+    .product-detail-info {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .related-products-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+}
+
+/* --- Checkout Page --- */
+@media (max-width: 768px) {
+    .checkout-container {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .checkout-form,
+    .order-summary {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .checkout-form .input-group input {
+        width: 100%;
+    }
+}
+
+/* --- Forms (Login/Register) --- */
+@media (max-width: 768px) {
+    .auth-form {
+        width: 90%;
+        padding: 20px;
+    }
+}
+
+/* --- Footer --- */
+@media (max-width: 768px) {
+    footer {
+        padding: 20px 15px;
+        font-size: 0.9rem;
+    }
+}
