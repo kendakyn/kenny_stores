@@ -123,6 +123,9 @@ function addToCart(product) {
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
+    // notify other scripts that cart changed
+    window.dispatchEvent(new Event('storage'));
+
     alert("Product added to cart!");
 }
 

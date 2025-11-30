@@ -1,14 +1,11 @@
-// backend/models/Product.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  brand: { type: String, default: '' },
-  category: { type: String, required: true },
-  price: { type: Number, required: true },
-  image: { type: String, default: '' },
-  description: { type: String, default: '' },
-  countInStock: { type: Number, default: 0 },
+    name: { type: String, required: true },
+    category: { type: String, required: true },
+    price: { type: Number, required: true },
+    image: { type: String, required: true },
+    description: { type: String, default: "" }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model("Product", productSchema);
