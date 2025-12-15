@@ -4,19 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin - Kenny Electronics Store</title>
+
+<style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    form input, form select, form textarea, form button { display: block; width: 300px; margin-bottom: 10px; padding: 8px; }
+    #productsList div { border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; }
+    button { cursor: pointer; margin-right: 5px; }
+    img { max-width: 80px; display: block; margin-bottom: 5px; }
+</style>
 </head>
 <body>
+
 <h1>Admin Panel</h1>
 
 <h2>Add Product</h2>
-<form id="addProductForm">
-    <input type="text" id="name" placeholder="Name" required>
-    <input type="text" id="category" placeholder="Category" required>
-    <input type="number" id="price" placeholder="Price" required>
-    <input type="text" id="image" placeholder="Image URL" required>
-    <textarea id="description" placeholder="Description"></textarea>
+<form id="addProductForm" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="Product Name" required>
+    
+    <select name="category" required>
+        <option value="">Select Category</option>
+        <option value="Laptops">Laptops</option>
+        <option value="Phones">Phones</option>
+        <option value="Accessories">Accessories</option>
+        <option value="Televisions">Televisions</option>
+    </select>
+
+    <input type="number" name="price" placeholder="Price" min="0" required>
+
+    <input type="file" name="image" accept="image/*" required>
+
+    <textarea name="description" placeholder="Description"></textarea>
+
     <button type="submit">Add Product</button>
 </form>
+
+<hr>
 
 <h2>All Products</h2>
 <div id="productsList"></div>
@@ -24,15 +46,22 @@
 <script>
 const API_URL = "http://localhost:3000/api/products";
 
+// -------------------------
+// LOAD PRODUCTS
+// -------------------------
 async function loadProducts() {
     const res = await fetch(API_URL);
     const products = await res.json();
     const container = document.getElementById("productsList");
     container.innerHTML = "";
+
     products.forEach(p => {
         const div = document.createElement("div");
         div.innerHTML = `
-            <b>${p.name}</b> - $${p.price} - ${p.category} 
+            <strong>${p.name}</strong><br>
+            Category: ${p.category}<br>
+            Price: $${p.price}<br>
+            <img src="${p.image}" alt="${p.name}">
             <button onclick="deleteProduct('${p._id}')">Delete</button>
             <button onclick="editProduct('${p._id}')">Edit</button>
         `;
@@ -40,49 +69,67 @@ async function loadProducts() {
     });
 }
 
+// -------------------------
+// ADD PRODUCT (FormData)
+// -------------------------
 document.getElementById("addProductForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const product = {
-        name: document.getElementById("name").value,
-        category: document.getElementById("category").value,
-        price: Number(document.getElementById("price").value),
-        image: document.getElementById("image").value,
-        description: document.getElementById("description").value
-    };
+    const form = e.target;
+
+    const formData = new FormData();
+    formData.append("name", form.name.value);
+    formData.append("category", form.category.value);
+    formData.append("price", form.price.value);
+    formData.append("description", form.description.value);
+    formData.append("image", form.image.files[0]);
+
     await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product)
+        body: formData
     });
+
+    form.reset();
     loadProducts();
 });
 
+// -------------------------
+// DELETE PRODUCT
+// -------------------------
 async function deleteProduct(id) {
     await fetch(`${API_URL}/${id}`, { method: "DELETE" });
     loadProducts();
 }
 
+// -------------------------
+// EDIT PRODUCT
+// -------------------------
 function editProduct(id) {
     const name = prompt("New Name:");
-    const category = prompt("New Category:");
-    <select id="category" required>
-    <option value="">Select Category</option>
-    <option value="Laptops">Laptops</option>
-    <option value="Phones">Phones</option>
-    <option value="Accessories">Accessories</option>
-    <option value="TVs">Televisions</option>
-</select>
+    const category = prompt("New Category (Laptops / Phones / Accessories / Televisions):");
     const price = prompt("New Price:");
-    const image = prompt("New Image URL:");
+    const image = prompt("New Image URL (optional, leave empty to keep current):");
     const description = prompt("New Description:");
+
+    if (!name || !category || !price) return;
+
     fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, category, price: Number(price), image, description })
-    }).then(() => loadProducts());
+        body: JSON.stringify({
+            name,
+            category,
+            price: Number(price),
+            image: image ? image : undefined,
+            description
+        })
+    }).then(loadProducts);
 }
 
+// -------------------------
+// INITIAL LOAD
+// -------------------------
 loadProducts();
 </script>
+
 </body>
 </html>

@@ -7,9 +7,220 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        .checkout-form-section,
+        .order-summary-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .checkout-form-section h2,
+        .order-summary-section h2 {
+            margin-bottom: 25px;
+            color: #222;
+            font-size: 24px;
+            border-bottom: 2px solid #00aaff;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00aaff;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .order-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-info h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .order-item-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .order-totals {
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+
+        .total-row.subtotal {
+            color: #666;
+        }
+
+        .total-row.shipping {
+            color: #666;
+        }
+
+        .total-row.grand-total {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00aaff;
+            border-top: 2px solid #00aaff;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .payment-methods {
+            margin: 20px 0;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #00aaff;
+            background: #f0f9ff;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .payment-option.selected {
+            border-color: #00aaff;
+            background: #f0f9ff;
+        }
+
+        .payment-icon {
+            margin-left: auto;
+            font-size: 24px;
+        }
+
+        .btn-place-order {
+            width: 100%;
+            padding: 16px;
+            background: #00aaff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-place-order:hover {
+            background: #008ecc;
+        }
+
+        .btn-place-order:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .empty-checkout {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-checkout i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
     <!-- ================= HEADER ================= -->
@@ -31,83 +242,153 @@
         </div>
     </header>
 
-
     <!-- ================= CHECKOUT SECTION ================= -->
     <section class="checkout-section">
-
-        <h2 class="section-title">Checkout</h2>
-
         <div class="checkout-container">
 
-            <!-- ================= SHIPPING & PAYMENT FORM ================= -->
-            <form id="checkoutForm" class="checkout-form">
+            <!-- EMPTY CHECKOUT MESSAGE -->
+            <div class="empty-checkout" id="emptyCheckout" style="display: none;">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <h2>Your cart is empty</h2>
+                <p>Add some products to proceed to checkout.</p>
+                <a href="products.html" class="btn" style="display: inline-block; margin-top: 20px;">
+                    Shop Products
+                </a>
+            </div>
 
-                <h3>Shipping Information</h3>
+            <!-- CHECKOUT FORM -->
+            <div class="checkout-form-section" id="checkoutForm">
+                <h2><i class="fa-solid fa-truck"></i> Shipping Information</h2>
 
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="fullName" required placeholder="John Doe">
+                <form id="shippingForm">
+                    <!-- Personal Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label for="address">Street Address *</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State/Province *</label>
+                            <input type="text" id="state" name="state" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zipCode">ZIP/Postal Code *</label>
+                            <input type="text" id="zipCode" name="zipCode" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country *</label>
+                            <select id="country" name="country" required>
+                                <option value="">Select Country</option>
+                                <option value="KE">Kenya</option>
+                                <option value="US">United States</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="CA">Canada</option>
+                                <option value="AU">Australia</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <h2 style="margin-top: 30px;"><i class="fa-solid fa-credit-card"></i> Payment Method</h2>
+                    
+                    <div class="payment-methods">
+                        <label class="payment-option selected">
+                            <input type="radio" name="paymentMethod" value="card" checked>
+                            <span>Credit/Debit Card</span>
+                            <i class="fa-solid fa-credit-card payment-icon"></i>
+                        </label>
+
+                        <label class="payment-option" id="mpesaOption">
+                            <input type="radio" name="paymentMethod" value="mpesa" id="mpesaRadio">
+                            <span>M-Pesa (Kenya)</span>
+                            <i class="fa-solid fa-mobile-alt payment-icon"></i>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="paypal">
+                            <span>PayPal</span>
+                            <i class="fa-brands fa-paypal payment-icon"></i>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cod">
+                            <span>Cash on Delivery</span>
+                            <i class="fa-solid fa-money-bill payment-icon"></i>
+                        </label>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="form-group">
+                        <label for="orderNotes">Order Notes (Optional)</label>
+                        <textarea id="orderNotes" name="orderNotes" rows="3" placeholder="Special instructions for delivery..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ORDER SUMMARY -->
+            <div class="order-summary-section" id="orderSummary">
+                <h2><i class="fa-solid fa-receipt"></i> Order Summary</h2>
+
+                <div class="order-items" id="orderItems">
+                    <!-- Items will be loaded by JavaScript -->
                 </div>
 
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="email" required placeholder="you@example.com">
+                <div class="order-totals">
+                    <div class="total-row subtotal">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount">$0.00</span>
+                    </div>
+                    <div class="total-row shipping">
+                        <span>Shipping:</span>
+                        <span id="shippingAmount">$10.00</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">$0.00</span>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="phone" required placeholder="+254 7XXXXXXXX">
-                </div>
-
-                <div class="input-group">
-                    <label>Address</label>
-                    <input type="text" id="address" required placeholder="Street Address">
-                </div>
-
-                <div class="input-group">
-                    <label>City</label>
-                    <input type="text" id="city" required placeholder="City">
-                </div>
-
-                <div class="input-group">
-                    <label>Postal Code</label>
-                    <input type="text" id="postalCode" required placeholder="Postal Code">
-                </div>
-
-                <div class="input-group">
-                    <label>Country</label>
-                    <input type="text" id="country" required placeholder="Country">
-                </div>
-
-                <h3>Payment Method</h3>
-                <p>Currently we support <strong>Mpesa</strong>. Payment prompt will appear after placing the order.</p>
-
-                <button type="submit" class="btn place-order-btn">
-                    <i class="fa-solid fa-money-bill-wave"></i> Place Order
+                <button type="button" class="btn-place-order" id="placeOrderBtn">
+                    <i class="fa-solid fa-lock"></i> Place Order
                 </button>
-            </form>
 
-
-            <!-- ================= ORDER SUMMARY ================= -->
-            <div class="order-summary">
-
-                <h3>Order Summary</h3>
-
-                <div id="orderItems">
-                    <!-- Cart items will be dynamically loaded here -->
-                </div>
-
-                <div class="order-total">
-                    <p>Total: <span id="checkoutTotal">$0</span></p>
-                </div>
-
+                <p style="text-align: center; margin-top: 15px; font-size: 13px; color: #666;">
+                    <i class="fa-solid fa-shield-alt"></i> Your payment information is secure
+                </p>
             </div>
 
         </div>
-
     </section>
-
-
 
     <!-- ================= FOOTER ================= -->
     <footer>
@@ -116,9 +397,8 @@
         </div>
     </footer>
 
-
     <!-- JS -->
-    <script src="js/cart.js"></script> <!-- ensures cart functions work -->
     <script src="js/checkout.js"></script>
+
 </body>
 </html>

@@ -14,7 +14,7 @@
 
 .header .logo h1 {
     font-size: 1.8rem;
-    color: #ffcc00;
+    color: #15dceb;
     margin: 0;
 }
 
@@ -32,7 +32,7 @@
 
 .navbar a:hover,
 .navbar a.active {
-    color: #ffcc00;
+    color: #0991bb;
 }
 
 .icons a {
@@ -43,7 +43,7 @@
 }
 
 .icons a:hover {
-    color: #ffcc00;
+    color: #09b0ce;
 }
 
 /* Responsive Header */

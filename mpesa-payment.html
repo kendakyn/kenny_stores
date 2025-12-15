@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Payment - Kenny Electronics Store</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .mpesa-container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        .mpesa-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .mpesa-header {
+            background: linear-gradient(135deg, #00d13a 0%, #00a82d 100%);
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .mpesa-header i {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .mpesa-header h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .mpesa-body {
+            padding: 40px 30px;
+        }
+
+        .order-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .order-info h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d13a;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid #00d13a;
+        }
+
+        .payment-form {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00d13a;
+        }
+
+        .phone-prefix {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-prefix select {
+            width: 100px;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .phone-prefix input {
+            flex: 1;
+        }
+
+        .mpesa-instructions {
+            background: #e8f5e9;
+            border-left: 4px solid #00d13a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .mpesa-instructions h4 {
+            margin: 0 0 15px 0;
+            color: #00a82d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mpesa-instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .mpesa-instructions li {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: #00d13a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-pay:hover {
+            background: #00a82d;
+        }
+
+        .btn-pay:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn-cancel:hover {
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+        }
+
+        .payment-status {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .payment-status.active {
+            display: block;
+        }
+
+        .payment-status i {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .payment-status.processing i {
+            color: #ffa726;
+            animation: pulse 1.5s infinite;
+        }
+
+        .payment-status.success i {
+            color: #00d13a;
+        }
+
+        .payment-status.failed i {
+            color: #ff4d4d;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .status-message {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-details {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .mpesa-container {
+                margin: 20px auto;
+            }
+
+            .mpesa-body {
+                padding: 30px 20px;
+            }
+
+            .mpesa-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="logo">
+            <h1>Kenny Electronics Store</h1>
+        </div>
+
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">Cart</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+        <div class="icons">
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="login.html"><i class="fa-solid fa-user"></i></a>
+        </div>
+    </header>
+
+    <!-- ================= M-PESA PAYMENT SECTION ================= -->
+    <section class="mpesa-section">
+        <div class="mpesa-container">
+            <div class="mpesa-card">
+                
+                <!-- M-Pesa Header -->
+                <div class="mpesa-header">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <h2>M-Pesa Payment</h2>
+                    <p>Lipa Na M-Pesa</p>
+                </div>
+
+                <!-- M-Pesa Body -->
+                <div class="mpesa-body" id="mpesaForm">
+                    
+                    <!-- Order Information -->
+                    <div class="order-info">
+                        <h3><i class="fa-solid fa-receipt"></i> Order Summary</h3>
+                        <div class="info-row">
+                            <span>Order ID:</span>
+                            <span id="orderId">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Items:</span>
+                            <span id="itemCount">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Amount to Pay:</span>
+                            <span id="totalAmount">KES 0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="mpesa-instructions">
+                        <h4><i class="fa-solid fa-info-circle"></i> How to Pay</h4>
+                        <ol>
+                            <li>Enter your M-Pesa registered phone number</li>
+                            <li>Click "Send STK Push"</li>
+                            <li>Enter your M-Pesa PIN on your phone</li>
+                            <li>Wait for confirmation</li>
+                        </ol>
+                    </div>
+
+                    <!-- Payment Form -->
+                    <form class="payment-form" id="mpesaPaymentForm">
+                        <div class="form-group">
+                            <label for="mpesaPhone">
+                                <i class="fa-solid fa-phone"></i> M-Pesa Phone Number
+                            </label>
+                            <div class="phone-prefix">
+                                <select id="phonePrefix">
+                                    <option value="+254">🇰🇪 +254</option>
+                                    <option value="+255">🇹🇿 +255</option>
+                                </select>
+                                <input 
+                                    type="tel" 
+                                    id="mpesaPhone" 
+                                    name="mpesaPhone" 
+                                    placeholder="712345678"
+                                    pattern="[0-9]{9}"
+                                    required
+                                >
+                            </div>
+                            <small style="color: #666; margin-top: 5px; display: block;">
+                                Enter phone number without leading 0 (e.g., 712345678)
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn-pay" id="payBtn">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Send STK Push
+                        </button>
+
+                        <button type="button" class="btn-cancel" id="cancelBtn">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Checkout
+                        </button>
+                    </form>
+
+                </div>
+
+                <!-- Payment Status (Hidden by default) -->
+                <div class="payment-status" id="paymentStatus">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <div class="status-message" id="statusMessage">Processing Payment...</div>
+                    <div class="status-details" id="statusDetails">
+                        Please check your phone and enter your M-Pesa PIN
+                    </div>
+                    <button class="btn-cancel" id="statusBackBtn" style="display: none;">
+                        Continue Shopping
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Kenny Electronics Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="js/mpesa-payment.js"></script>
+
+</body>
+</html>
