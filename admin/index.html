@@ -11,6 +11,8 @@
     #productsList div { border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; }
     button { cursor: pointer; margin-right: 5px; }
     img { max-width: 80px; display: block; margin-bottom: 5px; }
+    .editProductForm { border: 1px solid #999; padding: 10px; margin-bottom: 10px; }
+    .editProductForm button { width: auto; margin-right: 5px; }
 </style>
 </head>
 <body>
@@ -44,33 +46,43 @@
 <div id="productsList"></div>
 
 <script>
-const API_URL = "http://localhost:3000/api/products";
+const SERVER_URL = "http://localhost:3000"; 
+const API_URL = `${SERVER_URL}/api/products`;
 
 // -------------------------
 // LOAD PRODUCTS
 // -------------------------
 async function loadProducts() {
-    const res = await fetch(API_URL);
-    const products = await res.json();
-    const container = document.getElementById("productsList");
-    container.innerHTML = "";
+    try {
+        const res = await fetch(API_URL);
+        const products = await res.json();
+        const container = document.getElementById("productsList");
+        container.innerHTML = "";
 
-    products.forEach(p => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <strong>${p.name}</strong><br>
-            Category: ${p.category}<br>
-            Price: $${p.price}<br>
-            <img src="${p.image}" alt="${p.name}">
-            <button onclick="deleteProduct('${p._id}')">Delete</button>
-            <button onclick="editProduct('${p._id}')">Edit</button>
-        `;
-        container.appendChild(div);
-    });
+        products.forEach(p => {
+            const div = document.createElement("div");
+
+            const imageUrl = SERVER_URL + p.image;
+
+            div.innerHTML = `
+                <img src="${imageUrl}" alt="${p.name}"><br>
+                <strong>${p.name}</strong><br>
+                Category: ${p.category}<br>
+                Price: $${p.price}<br>
+                Description: ${p.description || 'N/A'}<br>
+                <button onclick="deleteProduct('${p._id}')">Delete</button>
+                <button onclick="editProductInline('${p._id}')">Edit</button>
+            `;
+            container.appendChild(div);
+        });
+    } catch (error) {
+        console.error("Error loading products:", error);
+        alert("Failed to load products. Make sure the server is running.");
+    }
 }
 
 // -------------------------
-// ADD PRODUCT (FormData)
+// ADD PRODUCT
 // -------------------------
 document.getElementById("addProductForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -83,46 +95,101 @@ document.getElementById("addProductForm").addEventListener("submit", async (e) =
     formData.append("description", form.description.value);
     formData.append("image", form.image.files[0]);
 
-    await fetch(API_URL, {
-        method: "POST",
-        body: formData
-    });
-
-    form.reset();
-    loadProducts();
+    try {
+        const response = await fetch(API_URL, { method: "POST", body: formData });
+        if (response.ok) {
+            alert("Product added successfully!");
+            form.reset();
+            loadProducts();
+        } else {
+            alert("Failed to add product");
+        }
+    } catch (error) {
+        console.error("Error adding product:", error);
+        alert("Error adding product. Make sure the server is running.");
+    }
 });
 
 // -------------------------
 // DELETE PRODUCT
 // -------------------------
 async function deleteProduct(id) {
-    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    loadProducts();
+    if (!confirm("Are you sure you want to delete this product?")) return;
+    
+    try {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        alert("Product deleted successfully!");
+        loadProducts();
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        alert("Failed to delete product");
+    }
 }
 
 // -------------------------
-// EDIT PRODUCT
+// EDIT PRODUCT INLINE
 // -------------------------
-function editProduct(id) {
-    const name = prompt("New Name:");
-    const category = prompt("New Category (Laptops / Phones / Accessories / Televisions):");
-    const price = prompt("New Price:");
-    const image = prompt("New Image URL (optional, leave empty to keep current):");
-    const description = prompt("New Description:");
+async function editProductInline(id) {
+    try {
+        const res = await fetch(`${API_URL}`);
+        const products = await res.json();
+        const product = products.find(p => p._id === id);
+        if (!product) return;
 
-    if (!name || !category || !price) return;
+        const container = document.getElementById("productsList");
+        container.innerHTML = ""; // clear for editing mode
 
-    fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name,
-            category,
-            price: Number(price),
-            image: image ? image : undefined,
-            description
-        })
-    }).then(loadProducts);
+        const div = document.createElement("div");
+        const imageUrl = SERVER_URL + product.image;
+
+        div.innerHTML = `
+            <form class="editProductForm" data-id="${product._id}" enctype="multipart/form-data">
+                <img src="${imageUrl}" alt="${product.name}"><br>
+                <input type="text" name="name" value="${product.name}" required>
+                <select name="category" required>
+                    <option value="Laptops" ${product.category === 'Laptops' ? 'selected' : ''}>Laptops</option>
+                    <option value="Phones" ${product.category === 'Phones' ? 'selected' : ''}>Phones</option>
+                    <option value="Accessories" ${product.category === 'Accessories' ? 'selected' : ''}>Accessories</option>
+                    <option value="Televisions" ${product.category === 'Televisions' ? 'selected' : ''}>Televisions</option>
+                </select>
+                <input type="number" name="price" value="${product.price}" min="0" required>
+                <input type="file" name="image" accept="image/*">
+                <textarea name="description">${product.description || ''}</textarea>
+                <button type="submit">Save</button>
+                <button type="button" class="cancel-btn">Cancel</button>
+            </form>
+        `;
+        container.appendChild(div);
+
+        const form = div.querySelector(".editProductForm");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const productId = form.dataset.id;
+
+            try {
+                const response = await fetch(`${API_URL}/${productId}`, {
+                    method: "PUT",
+                    body: formData
+                });
+                if (response.ok) {
+                    alert("Product updated successfully!");
+                    loadProducts();
+                } else {
+                    alert("Failed to update product");
+                }
+            } catch (error) {
+                console.error("Error updating product:", error);
+                alert("Error updating product");
+            }
+        });
+
+        // Cancel button
+        form.querySelector(".cancel-btn").addEventListener("click", loadProducts);
+
+    } catch (error) {
+        console.error("Error loading product for edit:", error);
+    }
 }
 
 // -------------------------

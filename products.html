@@ -66,67 +66,76 @@
     </section>
 
     <!-- ================= PRODUCTS GRID ================= -->
-    <section class="products-list">
-        <div class="product-grid">
+<section class="products-list">
+    <div class="product-grid" id="productGrid">
+        <!-- Products from DB will be injected here -->
+    </div>
+</section>
 
-            <div class="product-card" data-id="1" data-category="Laptops" data-price="899">
-                <img src="images/products/laptop3.jpg" alt="Laptop">
-                <h3>Gaming Laptop</h3>
-                <p class="price">$899</p>
+<script>
+const SERVER_URL = "http://localhost:3000";
+const API_URL = SERVER_URL + "/api/products";
+const productGrid = document.getElementById("productGrid");
+
+// Fetch products from database and display
+async function loadProducts() {
+    try {
+        const res = await fetch(API_URL);
+        const products = await res.json();
+
+        productGrid.innerHTML = ""; // Clear existing content
+
+        products.forEach(product => {
+            const card = document.createElement("div");
+            card.classList.add("product-card");
+            card.dataset.id = product._id;
+            card.dataset.category = product.category;
+            card.dataset.price = product.price;
+
+            card.innerHTML = `
+                <img src="${SERVER_URL + product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p class="price">$${product.price}</p>
                 <button class="add-cart-btn">Add to Cart</button>
-            </div>
+            `;
 
-            <div class="product-card" data-id="2" data-category="Phones" data-price="499">
-                <img src="images/products/phone1.jpg" alt="Phone">
-                <h3>Smartphone X</h3>
-                <p class="price">$499</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+            // Add Add-to-Cart functionality
+            const btn = card.querySelector(".add-cart-btn");
+            btn.addEventListener("click", () => addToCart(product));
 
-            <div class="product-card" data-id="3" data-category="Accessories" data-price="99">
-                <img src="images/products/headphones1.jpg" alt="Headphones">
-                <h3>Wireless Headphones</h3>
-                <p class="price">$99</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+            productGrid.appendChild(card);
+        });
+    } catch (err) {
+        console.error("Error loading products:", err);
+    }
+}
 
-            <div class="product-card" data-id="4" data-category="TVs" data-price="699">
-                <img src="images/products/tv1.jpg" alt="Smart TV">
-                <h3>55" Smart TV</h3>
-                <p class="price">$699</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+// Add to Cart function
+function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existing = cart.find(item => item.id === product._id);
 
-            <div class="product-card" data-id="5" data-category="Laptops" data-price="1299">
-                <img src="images/products/laptop2.avif" alt="Laptop">
-                <h3>Ultra Thin Laptop</h3>
-                <p class="price">$1299</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
 
-            <div class="product-card" data-id="6" data-category="Phones" data-price="899">
-                <img src="images/products/phone2.jpg" alt="Phone">
-                <h3>Smartphone Pro Max</h3>
-                <p class="price">$899</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${product.name} added to cart!`);
+    window.dispatchEvent(new Event("storage"));
+}
 
-            <div class="product-card" data-id="7" data-category="Accessories" data-price="59">
-                <img src="images/products/keyboard.jpg" alt="Keyboard">
-                <h3>Mechanical Keyboard</h3>
-                <p class="price">$59</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
+// Load products when page loads
+loadProducts();
+</script>
 
-            <div class="product-card" data-id="8" data-category="TVs" data-price="1199">
-                <img src="images/products/tv2.jpg" alt="Smart TV">
-                <h3>65" 4K UHD TV</h3>
-                <p class="price">$1199</p>
-                <button class="add-cart-btn">Add to Cart</button>
-            </div>
-
-        </div>
-    </section>
 
     <!-- ================= FOOTER ================= -->
     <footer>

@@ -2,8 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const SERVER_URL = "http://localhost:3000";
-productImage.src = SERVER_URL + product.image;
 
 // Multer and file system
 const multer = require("multer");
@@ -20,7 +18,10 @@ app.use(express.json()); // body-parser is no longer needed
 
 /* ------------------- UPLOADS FOLDER & MULTER ------------------- */
 
-
+// Create uploads folder if it doesn't exist
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads");
+}
 
 // Multer storage configuration
 const storage = multer.diskStorage({
@@ -34,7 +35,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Serve uploaded images
+// Serve uploaded images - THIS IS CRITICAL!
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 /* ------------------- DATABASE ------------------- */
@@ -74,11 +75,23 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
 });
 
 // Update product
-app.put("/api/products/:id", async (req, res) => {
+app.put("/api/products/:id", upload.single("image"), async (req, res) => {
   try {
+    const updateData = {
+      name: req.body.name,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description
+    };
+
+    // Only update image if a new one was uploaded
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -99,6 +112,14 @@ app.delete("/api/products/:id", async (req, res) => {
 
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Optional: Delete the image file from uploads folder
+    if (deletedProduct.image) {
+      const imagePath = path.join(__dirname, deletedProduct.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
     }
 
     res.status(200).json({ message: "Product deleted successfully" });

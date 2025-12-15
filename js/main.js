@@ -2,6 +2,8 @@
 // MAIN SITE SCRIPT - global functionality
 // ===============================
 
+const SERVER_URL = "http://localhost:3000"; // Add this constant
+
 document.addEventListener("DOMContentLoaded", function () {
 
     /* =========================
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const productGrid = document.getElementById("featured-products");
 
     if (productGrid) {
-        fetch("http://localhost:3000/api/products")
+        fetch(`${SERVER_URL}/api/products`)
             .then(res => res.json())
             .then(products => {
                 productGrid.innerHTML = "";
@@ -51,8 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     const card = document.createElement("div");
                     card.classList.add("product-card");
 
+                    // FIX: Prepend SERVER_URL to the image path
+                    const imageUrl = SERVER_URL + product.image;
+
                     card.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
+                        <img src="${imageUrl}" alt="${product.name}">
                         <h3>${product.name}</h3>
                         <p class="price">$${product.price}</p>
                         <button class="add-cart-btn" data-id="${product._id}">
